@@ -1,10 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+import App , {Router, Route}from "./App.tsx";
+
+
+
+ <App port={3000}>
+   <Router path="/" >
+   // @ts-ignore
+     <Route path="/hello" method="get" handler={(_, res) => res.send("hello")}/>
+   </Router>
+ </App>
+

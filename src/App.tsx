@@ -1,34 +1,61 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { ReactNode, useEffect,useContext, createContext, useMemo } from "react";
+import express, {Router as ERouter, RequestHandler} from 'express'
 
-function App() {
-  const [count, setCount] = useState(0);
+const RouterContext = createContext({
+  router: ERouter(),
+});
+
+export const Route = ({path, method, handler}: {
+  path: string;
+  method: 'get';
+  handler: RequestHandler;
+}) => {
+  const { router } = useContext(RouterContext);
+  
+  useEffect(() => {
+    
+    router[method](path, handler)
+  }, []);
+  
+  return null;
+}
+
+export const Router = ({path, children}: {
+  path: string;
+  children: ReactNode;
+}) => {
+  
+  const { router: parent } = useContext(RouterContext);
+  
+  const router = useMemo(() => {
+    const inner = ERouter();
+    if (parent) {
+      parent.use(path, inner);
+    }
+    return inner;
+  }, []);
+  
+  return (
+    <RouterContext.Provider value={{ router }}>
+      {children}
+    </RouterContext.Provider>
+  );
+}
+
+function App({children, port}: {
+  children: ReactNode;
+  port: number;
+}) {
+
+  const app = useMemo(() => express(), []);
+  
+  app.listen(port, () => console.log("yahh!"));
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <RouterContext.Provider value={{router: app}}>
+      {children}
+    </RouterContext.Provider>
+    
   );
 }
 
