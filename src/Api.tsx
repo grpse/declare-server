@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import App , {Router, Route, Middleware}from "./App.tsx";
-import { Express } from 'express';
+import { Express, Router as ERouter} from 'express';
 
 export const Api: FC<{
     app: Express;
 }> = ({ app }) => {
     return (
-        <App app={app}>
+        <App router={app} createRouter={ERouter}>
             <Middleware handler={(req, res, next) => {
                 console.log('req.query', req.query)
                 next();

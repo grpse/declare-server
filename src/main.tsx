@@ -5,5 +5,5 @@ import { Api } from "./Api.tsx";
 const app = express();
 
 ReactDOMServer.renderToStaticMarkup(<Api app={app} />);
-
-app.listen(3000, () => console.log("yahh!"));
+console.log('port', process.env.PORT)
+app.listen(process.env.PORT || 3000, () => console.log("yahh!"));
