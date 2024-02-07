@@ -1,12 +1,12 @@
 
-import App , {Router, Route}from "./App.tsx";
+import express from 'express';
+import ReactDOMServer from 'react-dom/server';
+import { createElement } from 'react';
+import { Api } from './Api.tsx';
 
 
+const app = express();
+  
+ReactDOMServer.renderToStaticMarkup(<Api app={app} />)
 
- <App port={3000}>
-   <Router path="/" >
-   // @ts-ignore
-     <Route path="/hello" method="get" handler={(_, res) => res.send("hello")}/>
-   </Router>
- </App>
-
+app.listen(3000, () => console.log("yahh!"));

@@ -5,18 +5,13 @@ const RouterContext = createContext({
   router: ERouter(),
 });
 
-export const Route = ({path, method, handler}: {
-  path: string;
+export const Route = ({path = '/', method, children}: {
+  path?: string;
   method: 'get';
-  handler: RequestHandler;
+  children: RequestHandler;
 }) => {
   const { router } = useContext(RouterContext);
-  
-  useEffect(() => {
-    
-    router[method](path, handler)
-  }, []);
-  
+  router[method](path, children);
   return null;
 }
 
@@ -42,20 +37,29 @@ export const Router = ({path, children}: {
   );
 }
 
-function App({children, port}: {
+export const Middleware = ({
+  handler,
+  children,
+}: {
+  handler: RequestHandler;
   children: ReactNode;
-  port: number;
+}) => {
+
+  const { router } = useContext(RouterContext);
+
+  router.use(handler);
+
+  return children;
+}
+
+function App({children, app}: {
+  children: ReactNode;
+  app: Express;
 }) {
-
-  const app = useMemo(() => express(), []);
-  
-  app.listen(port, () => console.log("yahh!"));
-
   return (
     <RouterContext.Provider value={{router: app}}>
       {children}
-    </RouterContext.Provider>
-    
+    </RouterContext.Provider>    
   );
 }
 
