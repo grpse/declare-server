@@ -1,4 +1,4 @@
-# Layers YAJL (Yet Another Javascript Library)
+# Declare Server - YAJL (Yet Another Javascript Library)
 
 - experimentation of using JSX to define an api
 
