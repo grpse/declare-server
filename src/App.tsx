@@ -1,13 +1,10 @@
 import { ReactNode, useContext, createContext, useMemo } from "react";
 import { Router as ERouter, RequestHandler } from "express";
 
-type HandleRequest = (request: Request): Promise<
-
 const RouterContext = createContext({
   router: ERouter(),
   createRouter: ERouter,
 });
-
 
 export const Route = ({
   path = "/",
@@ -61,12 +58,12 @@ export const Middleware = ({
   return children;
 };
 
-function App({ 
-  children, 
+function App({
+  children,
   router,
   createRouter,
- }: { 
-  children: ReactNode; 
+}: {
+  children: ReactNode;
   router: ERouter;
   createRouter: () => ERouter;
 }) {
